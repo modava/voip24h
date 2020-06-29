@@ -17,4 +17,12 @@ class CallCenterAsset extends AssetBundle
         'voip24h/js/VoipSIP.js',
         'voip24h/js/custom.js'
     ];
+
+    public $jsOptions = array(
+        'position' => \yii\web\View::POS_END
+    );
+    public $depends = [
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
+    ];
 }
