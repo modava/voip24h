@@ -11,8 +11,8 @@
             </div>
             <div id="sip-dialpad-content">
                 <div class="row sipStatus">
-                    <div class="col-md-6 col-12 reset-col" id="txtRegStatus"></div>
-                    <div class="col-md-6 col-12 reset-col" id="txtCallStatus"></div>
+                    <div class="col-md-6 col-12 p-0" id="txtRegStatus"></div>
+                    <div class="col-md-6 col-12 p-0" id="txtCallStatus"></div>
                 </div>
                 <div id="ipnkeyboardMain">
                     <div id="ipnkeyboard">

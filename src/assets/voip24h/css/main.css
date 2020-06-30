@@ -2,17 +2,8 @@
     background-color: transparent;
     font-size: 13px;
     line-height: 1.42857143;
-    position: fixed;
-    bottom: 20px;
-    right: -100%;
-    transition: all .5s ease-in-out;
-    z-index: 9;
     /* firefox 19+ */
     /* ie */
-}
-
-#sipClient.active {
-    right: 10px;
 }
 
 #sipClient p {
@@ -22,7 +13,7 @@
 }
 
 #txtRegStatus {
-    text-align: left;
+    text-align: left:
 }
 
 #sipClient .sipStatus {
@@ -193,6 +184,25 @@ input#numDisplay {
     min-height: 332px;
     overflow: auto;
     max-height: 480px;
+    padding-right: 3px;
+}
+
+#sipClient #sip-logitems::-webkit-scrollbar {
+    width: 6px;
+}
+
+#sipClient #sip-logitems::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+#sipClient #sip-logitems::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+#sipClient #sip-logitems:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 #sipClient #sldVolume {
