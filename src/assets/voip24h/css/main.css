@@ -2,8 +2,17 @@
     background-color: transparent;
     font-size: 13px;
     line-height: 1.42857143;
+    position: fixed;
+    bottom: 20px;
+    right: -100%;
+    transition: all .5s ease-in-out;
+    z-index: 9;
     /* firefox 19+ */
     /* ie */
+}
+
+#sipClient.active {
+    right: 10px;
 }
 
 #sipClient p {

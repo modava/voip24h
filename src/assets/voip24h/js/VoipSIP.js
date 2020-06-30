@@ -636,7 +636,7 @@ $(function () {
         event.preventDefault();
         var uri = $(this).data('uri');
         $('#numDisplay').val(uri);
-        VoipSIP.phoneCallButtonPressed();
+        micPermissionAllowed(VoipSIP.phoneCallButtonPressed, VoipSIP.phoneCallButtonPressed);
     });
     $('#sldVolume').on('change', function () {
         var v = $(this).val() / 100, btn = $('#btnVol'), icon = $('#btnVol').find('i'), active = VoipSIP.callActiveID;
