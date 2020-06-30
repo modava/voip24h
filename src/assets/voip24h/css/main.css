@@ -37,6 +37,7 @@
     margin-top: 7px;
     margin-bottom: 5px;
     border-radius: 11px;
+    position: relative;
 }
 
 .ipnkeyboard {

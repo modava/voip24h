@@ -14,6 +14,7 @@ class CallCenterAsset extends AssetBundle
 
     public $js = [
         'voip24h/js/sip.js',
+        'voip24h/js/moment.min.js',
         'voip24h/js/VoipSIP.js',
         'voip24h/js/custom.js'
     ];
