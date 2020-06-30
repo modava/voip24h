@@ -1,7 +1,7 @@
 var VoipSIP;
 $(function () {
     user = window['user'];
-    if (user === null || typeof user !== 'object' || JSON.stringify(Object.keys(user)) !== JSON.stringify(['User', 'Pass', 'Realm', 'Display', 'WSServer'])) {
+    if (user === null || typeof user !== 'object' || JSON.stringify(Object.keys(user).sort()) !== JSON.stringify(['User', 'Pass', 'Realm', 'Display', 'WSServer']).sort()) {
         return;
     }
     VoipSIP = {
