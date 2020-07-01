@@ -75,6 +75,7 @@ $(function () {
                     newSess.displayName = newSess.remoteIdentity.displayName || newSess.remoteIdentity.uri.user;
                     newSess.ctxid = VoipSIP.getUniqueID();
                     var status;
+                    if (!$('#sipClient').hasClass('active')) $('#sipClient').addClass('active');
                     if (newSess.direction === 'incoming') {
                         status = "Incoming: " + newSess.displayName;
                         VoipSIP.startRingTone();
@@ -147,6 +148,7 @@ $(function () {
                     });
                     newSess.on('cancel', function (e) {
                         unconfirmOnUnload();
+                        $('#sip-dialpad').removeClass('open');
                         $("#numDisplay").val('');
                         $(".btnCall").removeAttr('disabled');
                         VoipSIP.stopRingTone();
@@ -160,6 +162,7 @@ $(function () {
                     });
                     newSess.on('bye', function (e) {
                         unconfirmOnUnload();
+                        $('#sip-dialpad').removeClass('open');
                         $("#numDisplay").val('');
                         $(".btnCall").removeAttr('disabled');
                         VoipSIP.stopRingTone();
@@ -171,6 +174,7 @@ $(function () {
                     });
                     newSess.on('failed', function (e) {
                         unconfirmOnUnload();
+                        $('#sip-dialpad').removeClass('open');
                         $("#numDisplay").val('');
                         $(".btnCall").removeAttr('disabled');
                         VoipSIP.stopRingTone();
@@ -179,6 +183,7 @@ $(function () {
                     });
                     newSess.on('rejected', function (e) {
                         unconfirmOnUnload();
+                        $('#sip-dialpad').removeClass('open');
                         $("#numDisplay").val('');
                         $(".btnCall").removeAttr('disabled');
                         VoipSIP.stopRingTone();
@@ -465,24 +470,9 @@ $(function () {
                 });
             });
             VoipSIP.phone.on('registered', function (e) {
-                /*var closeEditorWarning = function () {
-                    return 'If you close this window, you will not be able to make or receive calls from your browser.';
-                };
-                var closePhone = function () {
-                    localStorage.removeItem('ctxPhone');
-                    VoipSIP.phone.stop();
-                };
-                window.onbeforeunload = closeEditorWarning;
-                window.onunload = closePhone;*/
                 localStorage.setItem('ctxPhone', 'true');
                 $("#mldError").modal('hide');
                 VoipSIP.setStatus("VOIP24H - " + user.Display);
-                /*if (SIP.WebRTC.isSupported()) {
-                    SIP.WebRTC.getUserMedia({
-                        audio: true,
-                        video: false
-                    }, VoipSIP.getUserMediaSuccess, VoipSIP.getUserMediaFailure);
-                }*/
             });
             VoipSIP.phone.on('registrationFailed', function (e) {
                 VoipSIP.setError(true, 'Registration Error.', 'An Error occurred registering your phone. Check your settings.');
@@ -497,13 +487,13 @@ $(function () {
             VoipSIP.phone.on('invite', function (incomingSession) {
                 var s = incomingSession;
                 s.direction = 'incoming';
-                VoipSIP.newSession(s);
+                micPermissionAllowed(VoipSIP.newSession, VoipSIP.newSession, s);
             });
             resolve();
         });
     }
 
-    async function micPermissionAllowed(grantedCallBack, deninedCallBack) {
+    async function micPermissionAllowed(grantedCallBack, deninedCallBack, v = null) {
         await navigator.permissions.query(
             // { name: 'camera' }
             {name: 'microphone'}
@@ -516,7 +506,7 @@ $(function () {
         ).then(function (permissionStatus) {
             state = permissionStatus.state;
             if (state === 'granted') {
-                if (typeof grantedCallBack === 'function') grantedCallBack();
+                if (typeof grantedCallBack === 'function') grantedCallBack(v);
                 return true;
             } else {
                 console.log('Mic permission denined');
@@ -526,7 +516,7 @@ $(function () {
                         console.log('Mic permission change');
                         if (this.state === 'granted') {
                             console.log('Mic permission granted');
-                            deninedCallBack();
+                            deninedCallBack(v);
                         }
                     }
                 }
@@ -604,6 +594,7 @@ $(function () {
     });
     $('.sipLogClear').click(function (event) {
         event.preventDefault();
+        $('.btnHangUp').remove();
         VoipSIP.logClear();
     });
     $('#sip-logitems').delegate('.sip-logitem .btnCall', 'click', function (event) {

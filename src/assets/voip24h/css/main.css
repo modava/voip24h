@@ -22,12 +22,12 @@
 }
 
 #txtRegStatus {
-    text-align: left:
+    text-align: left;
 }
 
 #sipClient .sipStatus {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     background: transparent;
     color: #000;
 }
@@ -48,8 +48,6 @@ input#numDisplay {
     outline: none;
     border: none;
     text-align: center;
-    font-size: 14px;
-    font-weight: 600;
     color: #000;
     background: transparent;
     border-radius: unset;
@@ -175,14 +173,14 @@ input#numDisplay {
 }
 
 #sipClient #sip-log .panel-heading {
-    padding: 10px 8px;
+    padding: 5px 8px;
     background: #fafafb;
-    height: 56px;
+    height: 38px;
 }
 
 #sipClient #sip-logitems {
     overflow: auto;
-    height: calc(100% - 56px);
+    height: calc(100% - 38px);
 }
 
 .fa.fa-trash {
@@ -219,7 +217,7 @@ input#numDisplay {
     margin: 0 auto;
     box-shadow: none;
     padding-left: 5px;
-    padding-right: 0px;
+    padding-right: 0;
     cursor: pointer;
 }
 
@@ -249,7 +247,7 @@ input#numDisplay {
 }
 
 .reset-col {
-    padding: 0px;
+    padding: 0;
 }
 
 .list-group-item {
@@ -258,22 +256,21 @@ input#numDisplay {
     padding: 10px 15px;
     margin-bottom: -1px;
     background-color: #fff;
-    border: 1px solid #ddd;
     margin-top: 5px;
     border: navajowhite;
 }
 
 button#AcbtnCallClean {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
     display: none;
 }
 
 button#AcbtnCallClean.active {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
     display: block;
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;
