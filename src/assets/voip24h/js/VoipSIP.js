@@ -1,5 +1,6 @@
 var VoipSIP = null;
 $(function () {
+    var reconnect;
     user = window['user'];
     if (user === null || typeof user !== 'object' || JSON.stringify(Object.keys(user).sort()) !== JSON.stringify(['User', 'Pass', 'Realm', 'Display', 'WSServer'].sort())) {
         console.log('User setting failed', user);
@@ -197,7 +198,7 @@ $(function () {
                 },
                 getUserMediaFailure: function (e) {
                     window.console.error('getUserMedia failed:', e);
-                    VoipSIP.setError(true, 'Media Error.', 'You must allow access to your microphone.  Check the address bar.', true);
+                    // VoipSIP.setError(true, 'Media Error.', 'You must allow access to your microphone.  Check the address bar.', true);
                 },
                 getUserMediaSuccess: function (stream) {
                     VoipSIP.Stream = stream;
@@ -415,23 +416,9 @@ $(function () {
                 },
                 setError: function (err, title, msg, closable) {
                     if (err === true) {
-                        $("#mdlError p").html(msg);
-                        $("#mdlError").modal('show');
-                        if (closable) {
-                            var b = '<button type="button" class="close" data-dismiss="modal">&times;</button>';
-                            $("#mdlError .modal-header").find('button').remove();
-                            $("#mdlError .modal-header").prepend(b);
-                            $("#mdlError .modal-title").html(title);
-                            $("#mdlError").modal({keyboard: true});
-                        } else {
-                            $("#mdlError .modal-header").find('button').remove();
-                            $("#mdlError .modal-title").html(title);
-                            $("#mdlError").modal({keyboard: false});
-                        }
-                        $('#numDisplay').prop('disabled', 'disabled');
+                        VoipSIP.setStatus("Error");
                     } else {
                         $('#numDisplay').removeProp('disabled');
-                        $("#mdlError").modal('hide');
                     }
                 },
                 hasWebRTC: function () {
@@ -463,11 +450,15 @@ $(function () {
             });
             VoipSIP.phone.on('disconnected', function (e) {
                 VoipSIP.setStatus("Disconnected");
-                VoipSIP.setError(true, 'Websocket Disconnected.', 'An Error occurred connecting to the websocket.');
-                localStorage.removeItem('SIPCreds');
+                reconnect = setInterval(function(){
+                    VoipSIP.setStatus("Reconnect");
+                    VoipSIP.connect();
+                }, 3000);
+                // VoipSIP.setError(true, 'Websocket Disconnected.', 'An Error occurred connecting to the websocket.');
+                /*localStorage.removeItem('SIPCreds');
                 $("#sessions > .session").each(function (i, session) {
                     VoipSIP.removeSession(session, 500);
-                });
+                });*/
             });
             VoipSIP.phone.on('registered', function (e) {
                 localStorage.setItem('ctxPhone', 'true');
@@ -475,12 +466,12 @@ $(function () {
                 VoipSIP.setStatus("VOIP24H - " + user.Display);
             });
             VoipSIP.phone.on('registrationFailed', function (e) {
-                VoipSIP.setError(true, 'Registration Error.', 'An Error occurred registering your phone. Check your settings.');
+                // VoipSIP.setError(true, 'Registration Error.', 'An Error occurred registering your phone. Check your settings.');
                 localStorage.removeItem('SIPCreds');
                 VoipSIP.setStatus("Error: Registration Failed");
             });
             VoipSIP.phone.on('unregistered', function (e) {
-                VoipSIP.setError(true, 'Registration Error.', 'An Error occurred registering your phone. Check your settings.');
+                // VoipSIP.setError(true, 'Registration Error.', 'An Error occurred registering your phone. Check your settings.');
                 localStorage.removeItem('SIPCreds');
                 VoipSIP.setStatus("Error: Registration Failed");
             });
@@ -625,6 +616,14 @@ $(function () {
     });
     $('#sip-logitems').delegate('.sip-logitem', 'dblclick', function (event) {
         event.preventDefault();
+        var uri = $(this).data('uri');
+        $('#numDisplay').val(uri);
+        micPermissionAllowed(VoipSIP.phoneCallButtonPressed, VoipSIP.phoneCallButtonPressed);
+    });
+    $('body').on('click', '.call-to', function (event) {
+        event.preventDefault();
+        console.log('a');
+        if (!$('#sipClient').hasClass('active')) $('#sipClient').addClass('active');
         var uri = $(this).data('uri');
         $('#numDisplay').val(uri);
         micPermissionAllowed(VoipSIP.phoneCallButtonPressed, VoipSIP.phoneCallButtonPressed);

@@ -22,6 +22,13 @@ class CallCenter extends \yii\base\Widget
 
     public function run()
     {
+        if(count(array_filter([
+            $this->Pass,
+            $this->Display,
+            $this->User,
+            $this->Realm,
+            $this->WSServer,
+            ])) < 5) return null;
         $view = $this->getView();
         $this->insFile = CallCenterAsset::register($view);
         return preg_replace_callback('/{\\w+}/', function ($matches) {

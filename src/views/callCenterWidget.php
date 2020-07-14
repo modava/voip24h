@@ -5,6 +5,7 @@
 
 ?>
     <div id="sipClient">
+        <div id="hide-call-center"><i class="fa fa-times"></i></div>
         <div id="sip-dialpad">
             <div id="sip-dialpad-header">
                 <i class="fa fa-angle-double-down"></i>
@@ -77,20 +78,6 @@
                         <div id="sip-logitems" class="list-group">
                             <p class="text-muted text-center">No recent calls from this browser.</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="mdlError" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
-             data-keyboard="false">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Sip Error</h4>
-                    </div>
-                    <div class="modal-body text-center text-danger">
-                        <h3><i class="fa fa-3x fa-ban"></i></h3>
-                        <p class="lead">Sip registration failed. No calls can be handled.</p>
                     </div>
                 </div>
             </div>

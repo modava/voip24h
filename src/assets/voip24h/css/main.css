@@ -15,6 +15,23 @@
     right: 10px;
 }
 
+#sipClient #hide-call-center {
+    position: absolute;
+    z-index: 1;
+    color: red;
+    width: 23px;
+    height: 23px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid 2px red;
+    border-radius: 5px;
+    background: #fff;
+    top: -7px;
+    left: -7px;
+    cursor: pointer;
+}
+
 #sipClient p {
     margin: 0;
     padding: 0 0 10px 0;
@@ -77,6 +94,7 @@ input#numDisplay {
     position: relative;
     border: solid 2px;
     overflow: hidden;
+    z-index: 0;
 }
 
 #sip-dialpad.open #well-sip {
