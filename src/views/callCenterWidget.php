@@ -5,7 +5,7 @@
 
 ?>
     <div id="sipClient">
-        <div id="hide-call-center"><i class="fa fa-times"></i></div>
+        <div id="hide-call-center"><i class="fa fa-times m-0"></i></div>
         <div id="sip-dialpad">
             <div id="sip-dialpad-header">
                 <i class="fa fa-angle-double-down"></i>
@@ -52,7 +52,7 @@
                     <div>
                         <div>
                             <button class="btn btn-success btn-block btnCall" title="Send">
-                                <i class="fa fa-phone"></i> Dial
+                                <i class="fa fa-phone m-0"></i> Dial
                             </button>
                         </div>
                         <div class="mt-2" id="MainCallSipBoard">

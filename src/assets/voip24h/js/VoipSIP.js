@@ -207,7 +207,7 @@ $(function () {
                     $('#txtCallStatus').html(status);
                 },
                 setStatus: function (status) {
-                    $("#txtRegStatus").html('<i class="fa fa-signal"></i> ' + status);
+                    $("#txtRegStatus").html('<i class="fa fa-signal m-0"></i> ' + status);
                 },
                 logCall: function (session, status) {
                     var log = {
@@ -276,16 +276,16 @@ $(function () {
                             }
                             break;
                     }
-                    i = '<div class="list-group-item sip-logitem clearfix ' + callClass + ' Vlabel_' + item.flow + ' LavAcTive' + callActive + '" data-uri="' + item.uri + '" data-sessionid="' + item.id + '" title="Double Click to Call"><div class="clearfix"><div class="pull-left"><i class="fa fa-fw ' + callIcon + ' fa-fw"></i> <strong>' + VoipSIP.formatPhone(item.uri) + '</strong><br><small>' + moment(item.start).format('MM/DD hh:mm:ss a') + '</small></div><div class="pull-right text-right"><em>' + item.clid + '</em><br>' + callLength + '</div></div>';
+                    i = '<div class="list-group-item sip-logitem clearfix ' + callClass + ' Vlabel_' + item.flow + ' LavAcTive' + callActive + '" data-uri="' + item.uri + '" data-sessionid="' + item.id + '" title="Double Click to Call"><div class="clearfix"><div class="pull-left"><i class="fa fa-fw ' + callIcon + ' fa-fw m-0"></i> <strong>' + VoipSIP.formatPhone(item.uri) + '</strong><br><small>' + moment(item.start).format('MM/DD hh:mm:ss a') + '</small></div><div class="pull-right text-right"><em>' + item.clid + '</em><br>' + callLength + '</div></div>';
                     if (callActive) {
                         $(".btnCall").attr('disabled', 'disabled');
                         i += '<div class="btn-group btn-group-xs pull-right">';
                         if (item.status === 'ringing' && item.flow === 'incoming') {
-                            i += '<button class="btn btn-xs btn-success btnCall" title="Call"><i class="fa fa-phone"></i></button>';
+                            i += '<button class="btn btn-xs btn-success btnCall" title="Call"><i class="fa fa-phone m-0"></i></button>';
                         } else {
-                            i += '<button class="btn btn-xs btn-primary btnHoldResume" title="Hold"><i class="fa fa-pause"></i></button><button class="btn btn-xs btn-info btnTransfer" title="Transfer"><i class="fa fa-random"></i></button><button class="btn btn-xs btn-warning btnMute" title="Mute"><i class="fa fa-fw fa-microphone"></i></button>';
+                            i += '<button class="btn btn-xs btn-primary btnHoldResume" title="Hold"><i class="fa fa-pause m-0"></i></button><button class="btn btn-xs btn-info btnTransfer" title="Transfer"><i class="fa fa-random m-0"></i></button><button class="btn btn-xs btn-warning btnMute" title="Mute"><i class="fa fa-fw fa-microphone m-0"></i></button>';
                         }
-                        i += '<button class="btn btn-xs btn-danger btnHangUp" title="Hangup"><i class="fa fa-stop"></i></button></div>';
+                        i += '<button class="btn btn-xs btn-danger btnHangUp" title="Hangup"><i class="fa fa-stop m-0"></i></button></div>';
                         $('#MainCallSipBoard').append('<button class="btn btn-danger btn-block btnHangUp" id="MainCallSipBoardbtnHangUp" data-sessionid="' + item.id + '" title="Hangup">Hangup</button>');
                         $('#MainCallSipBoardbtnHangUp').click(function (event) {
                             event.preventDefault();
