@@ -11,6 +11,8 @@ class CallCenter extends \yii\base\Widget
     public $User;
     public $Realm;
     public $WSServer;
+    public $urlGetUserInfo = null;
+    public $userInfo = [];
 
     public $itemContent = '<span class="badge badge-pill badge-danger"><i class="fa fa-phone fa-2x"></i></span>';
     public $itemUrl = 'javascript:void(0);';
@@ -22,12 +24,12 @@ class CallCenter extends \yii\base\Widget
 
     public function run()
     {
-        if(count(array_filter([
-            $this->Pass,
-            $this->Display,
-            $this->User,
-            $this->Realm,
-            $this->WSServer,
+        if (count(array_filter([
+                $this->Pass,
+                $this->Display,
+                $this->User,
+                $this->Realm,
+                $this->WSServer,
             ])) < 5) return null;
         $view = $this->getView();
         $this->insFile = CallCenterAsset::register($view);
@@ -66,7 +68,8 @@ class CallCenter extends \yii\base\Widget
                 'User' => $this->User,
                 'Realm' => $this->Realm,
                 'WSServer' => $this->WSServer,
-            ])
+            ]),
+            'urlGetUserInfo' => $this->urlGetUserInfo,
         ]);
     }
 }

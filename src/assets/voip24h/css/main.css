@@ -197,6 +197,7 @@ input#numDisplay {
 }
 
 #sipClient #sip-logitems {
+    display: block;
     overflow: auto;
     height: calc(100% - 38px);
 }
@@ -313,4 +314,27 @@ button#AcbtnCallClean.active {
 
 .fa.fa-fw.fa-bell.fa-fw {
     color: red;
+}
+
+.call-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.call-info:after {
+    display: none;
+}
+
+.call-info .pull-left {
+    width: calc(100% - 105px);
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.call-info .pull-left span {
+    display: flex;
+}
+
+.call-info .pull-right {
+    width: 95px;
 }

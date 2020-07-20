@@ -2,6 +2,7 @@ var VoipSIP = null;
 $(function () {
     var reconnect;
     user = window['user'];
+    urlGetUserInfo = window['urlGetUserInfo'];
     if (user === null || typeof user !== 'object' || JSON.stringify(Object.keys(user).sort()) !== JSON.stringify(['User', 'Pass', 'Realm', 'Display', 'WSServer'].sort())) {
         console.log('User setting failed', user);
         return;
@@ -70,11 +71,34 @@ $(function () {
                 getUniqueID: function () {
                     return Math.random().toString(36).substr(2, 9);
                 },
-                newSession: function (newSess) {
+                newSession: async function (newSess) {
+                    console.log('newSess', newSess);
                     $(".btnCall").attr('disabled', 'disabled');
                     $('#sip-dialpad').addClass('open');
                     newSess.displayName = newSess.remoteIdentity.displayName || newSess.remoteIdentity.uri.user;
                     newSess.ctxid = VoipSIP.getUniqueID();
+                    /* get user info */
+                    var userInfo = {
+                        'ho_ten': newSess.displayName,
+                        'phu_trach': null
+                    };
+                    if (urlGetUserInfo != null) {
+                        try {
+                            var phone = newSess.displayName.split('@');
+                            if (phone.length > 1) {
+                                phone = phone[0].split(':')[1];
+                            } else {
+                                phone = phone[0];
+                            }
+                            await $.get(urlGetUserInfo, {
+                                phone: phone
+                            }, (res) => {
+                                userInfo = Object.assign(userInfo, res);
+                            }, 'json');
+                        } catch (e) {
+                        }
+                    }
+                    newSess.userInfo = userInfo;
                     var status;
                     if (!$('#sipClient').hasClass('active')) $('#sipClient').addClass('active');
                     if (newSess.direction === 'incoming') {
@@ -210,12 +234,16 @@ $(function () {
                     $("#txtRegStatus").html('<i class="fa fa-signal m-0"></i> ' + status);
                 },
                 logCall: function (session, status) {
+                    window['sessionAbc'] = session;
                     var log = {
                         clid: session.displayName,
                         uri: session.remoteIdentity.uri.toString(),
                         id: session.ctxid,
-                        time: new Date().getTime()
+                        time: new Date().getTime(),
+                        ho_ten: session?.userInfo?.ho_ten,
+                        phu_trach: session?.userInfo?.phu_trach
                     }, calllog = JSON.parse(localStorage.getItem('sipCalls'));
+                    console.log('log', log);
                     if (!calllog) {
                         calllog = {};
                     }
@@ -225,7 +253,9 @@ $(function () {
                             clid: log.clid,
                             uri: log.uri,
                             start: log.time,
-                            flow: session.direction
+                            flow: session.direction,
+                            ho_ten: log.ho_ten,
+                            phu_trach: log.phu_trach
                         };
                     }
                     if (status === 'ended') {
@@ -236,6 +266,7 @@ $(function () {
                     } else {
                         calllog[log.id].status = status;
                     }
+                    console.log('calllog ', log.id, calllog[log.id]);
                     localStorage.setItem('sipCalls', JSON.stringify(calllog));
                     VoipSIP.logShow();
                 },
@@ -276,7 +307,8 @@ $(function () {
                             }
                             break;
                     }
-                    i = '<div class="list-group-item sip-logitem clearfix ' + callClass + ' Vlabel_' + item.flow + ' LavAcTive' + callActive + '" data-uri="' + item.uri + '" data-sessionid="' + item.id + '" title="Double Click to Call"><div class="clearfix"><div class="pull-left"><i class="fa fa-fw ' + callIcon + ' fa-fw m-0"></i> <strong>' + VoipSIP.formatPhone(item.uri) + '</strong><br><small>' + moment(item.start).format('MM/DD hh:mm:ss a') + '</small></div><div class="pull-right text-right"><em>' + item.clid + '</em><br>' + callLength + '</div></div>';
+                    i = '<div class="list-group-item sip-logitem clearfix ' + callClass + ' Vlabel_' + item.flow + ' LavAcTive' + callActive + '" data-uri="' + item.uri + '" data-sessionid="' + item.id + '" title="Double Click to Call"><div class="clearfix call-info"><div class="pull-left"><span><i class="fa fa-fw ' + callIcon + ' fa-fw m-0"></i> <marquee>' + (item?.ho_ten ? item?.ho_ten : VoipSIP.formatPhone(item.uri)) + '</marquee></span><small>' + moment(item.start).format('MM/DD hh:mm:ss a') + '</small></div><div class="pull-right text-right"><em>' + item.clid + '</em><br>' + callLength + '</div></div>';
+                    if (item?.phu_trach != null) i += '<div>' + item.phu_trach + '</div>';
                     if (callActive) {
                         $(".btnCall").attr('disabled', 'disabled');
                         i += '<div class="btn-group btn-group-xs pull-right">';
@@ -450,7 +482,7 @@ $(function () {
             });
             VoipSIP.phone.on('disconnected', function (e) {
                 VoipSIP.setStatus("Disconnected");
-                reconnect = setInterval(function(){
+                reconnect = setInterval(function () {
                     VoipSIP.setStatus("Reconnect");
                     VoipSIP.connect();
                 }, 3000);
@@ -622,7 +654,6 @@ $(function () {
     });
     $('body').on('click', '.call-to', function (event) {
         event.preventDefault();
-        console.log('a');
         if (!$('#sipClient').hasClass('active')) $('#sipClient').addClass('active');
         var uri = $(this).data('uri');
         $('#numDisplay').val(uri);
