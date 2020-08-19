@@ -20,10 +20,6 @@ class CallCenterAsset extends AssetBundle
     ];
 
     public $jsOptions = array(
-        'position' => \yii\web\View::POS_END
+        'position' => \yii\web\View::POS_HEAD
     );
-    public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
-    ];
 }
