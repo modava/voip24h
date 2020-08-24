@@ -2,9 +2,9 @@
 
 namespace modava\voip24h;
 
-use yii\web\JqueryAsset;
+use yii\web\AssetBundle;
 
-class CallCenterAsset extends JqueryAsset
+class CallCenterAsset extends AssetBundle
 {
     public $sourcePath = '@modava/voip24h/assets';
 
@@ -22,8 +22,4 @@ class CallCenterAsset extends JqueryAsset
     public $jsOptions = array(
         'position' => \yii\web\View::POS_END
     );
-
-    public $depends = [
-        JqueryAsset::class
-    ];
 }
