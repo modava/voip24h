@@ -274,7 +274,8 @@ $(function () {
                     $(".btnCall").attr('disabled', 'disabled');
                     var callActive = (item.status !== 'ended' && item.status !== 'missed'),
                         callLength = (item.status !== 'ended') ? '<span id="' + item.id + '"></span>' : moment.duration(item.stop - item.start).humanize(),
-                        callClass = '', callIcon, i, iend;
+                        callClass = '', callIcon, i, iend,
+                        showDelete = false;
                     switch (item.status) {
                         case 'ringing'  :
                             callClass = 'list-group-item-success';
@@ -288,6 +289,7 @@ $(function () {
                             if (item.flow === "outgoing") {
                                 callIcon = 'fa-chevron-right bellflagoutgoing';
                             }
+                            showDelete = true;
                             break;
                         case 'holding'  :
                             callClass = 'list-group-item-warning';
@@ -305,9 +307,10 @@ $(function () {
                             if (item.flow === "outgoing") {
                                 callIcon = 'fa-chevron-right bellflagoutgoing';
                             }
+                            showDelete = true;
                             break;
                     }
-                    i = '<div class="list-group-item sip-logitem clearfix ' + callClass + ' Vlabel_' + item.flow + ' LavAcTive' + callActive + '" data-uri="' + item.uri + '" data-sessionid="' + item.id + '" title="Double Click to Call"><div class="clearfix call-info"><div class="pull-left"><span><i class="fa fa-fw ' + callIcon + ' fa-fw m-0"></i> <marquee>' + (item?.ho_ten ? item?.ho_ten : VoipSIP.formatPhone(item.uri)) + '</marquee></span><small>' + moment(item.start).format('MM/DD hh:mm:ss a') + '</small></div><div class="pull-right text-right"><em>' + item.clid + '</em><br>' + callLength + '</div></div>';
+                    i = '<div class="list-group-item sip-logitem clearfix ' + callClass + ' Vlabel_' + item.flow + ' LavAcTive' + callActive + '" data-uri="' + item.uri + '" data-sessionid="' + item.id + '" title="Double Click to Call"><div class="clearfix call-info"><div class="pull-left"><span><i class="fa fa-fw ' + callIcon + ' fa-fw m-0"></i> <marquee>' + (item?.ho_ten ? item?.ho_ten : VoipSIP.formatPhone(item.uri)) + '</marquee></span><small>' + moment(item.start).format('MM/DD hh:mm:ss a') + '</small></div><div class="pull-right text-right"><em>' + item.clid + '(' + (item?.ho_ten ? item?.ho_ten : VoipSIP.formatPhone(item.uri)) + ')' + '</em><br>' + callLength + '</div></div>';
                     if (item?.phu_trach != null) i += '<div>' + item.phu_trach + '</div>';
                     if (callActive) {
                         $(".btnCall").attr('disabled', 'disabled');
@@ -328,6 +331,13 @@ $(function () {
                     } else {
                         $(".btnCall").removeAttr('disabled');
                     }
+
+                    /* Added by Hoang Duc 2020-09-22 */
+                    if (showDelete) {
+                        i += '<span class="pull-right"><i class="fa fa-trash text-muted sipLogItemClear" title="Clear Log"></i></span>';
+                    }
+                    /* End - Added by Hoang Duc 2020-09-22 */
+
                     i += '</div>';
                     $('#sip-logitems').append(i);
                     if (item.status === 'answered') {
@@ -365,6 +375,21 @@ $(function () {
                     localStorage.removeItem('sipCalls');
                     VoipSIP.logShow();
                 },
+                /* Added by Hoang Duc 2020-09-22 to clear Log Item*/
+                logClearItem: function (id) {
+                    let sipCalls =  JSON.parse(localStorage.getItem('sipCalls'));
+                    delete sipCalls[id];
+
+                    localStorage.setItem('sipCalls', JSON.stringify(sipCalls));
+
+                    if (Object.keys(sipCalls).length > 0) {
+                    } else {
+                        $('#sip-splash').removeClass('d-none');
+                        $('#sip-log').addClass('d-none');
+                    }
+                    jQuery('[data-sessionid="' + id+ '"]').remove();
+                },
+                /* End - Added by Hoang Duc 2020-09-22 */
                 sipCall: function (target) {
                     try {
                         var s = VoipSIP.phone.invite(target, {
@@ -652,6 +677,15 @@ $(function () {
         $('#numDisplay').val(uri);
         micPermissionAllowed(VoipSIP.phoneCallButtonPressed, VoipSIP.phoneCallButtonPressed);
     });
+    /* Added by Hoang Duc 2020-09-22 to register button clear call log item*/
+    $('#sip-logitems').delegate('.sipLogItemClear', 'click', function (event) {
+        let confirm = window.confirm('Xóa log?');
+        if (confirm) {
+            let logId = $(this).closest('.list-group-item').data('sessionid');
+            VoipSIP.logClearItem(logId);
+        }
+    });
+    /* End - Added by Hoang Duc 2020-09-22 to register button clear call log item*/
     $('body').on('click', '.call-to', function (event) {
         event.preventDefault();
         if (!$('#sipClient').hasClass('active')) $('#sipClient').addClass('active');
