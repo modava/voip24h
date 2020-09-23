@@ -280,6 +280,7 @@ $(function () {
                         case 'ringing'  :
                             callClass = 'list-group-item-success';
                             callIcon = 'fa-bell';
+                            showDelete = true;
                             break;
                         case 'missed'   :
                             callClass = 'list-group-item-danger';
