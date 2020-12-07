@@ -311,7 +311,7 @@ $(function () {
                             showDelete = true;
                             break;
                     }
-                    i = '<div class="list-group-item sip-logitem clearfix ' + callClass + ' Vlabel_' + item.flow + ' LavAcTive' + callActive + '" data-uri="' + item.uri + '" data-sessionid="' + item.id + '" title="Double Click to Call"><div class="clearfix call-info"><div class="pull-left"><span><i class="fa fa-fw ' + callIcon + ' fa-fw m-0"></i> <marquee>' + (item?.ho_ten ? item?.ho_ten : VoipSIP.formatPhone(item.uri)) + '</marquee></span><small>' + moment(item.start).format('MM/DD hh:mm:ss a') + '</small></div><div class="pull-right text-right"><em>' + item.clid + '(' + (item?.ho_ten ? item?.ho_ten : VoipSIP.formatPhone(item.uri)) + ')' + '</em><br>' + callLength + '</div></div>';
+                    i = '<div class="list-group-item sip-logitem clearfix ' + callClass + ' Vlabel_' + item.flow + ' LavAcTive' + callActive + '" data-uri="' + item.uri + '" data-sessionid="' + item.id + '" title="Double Click to Call"><div class="clearfix call-info"><div class="pull-left"><span><i class="fa fa-fw ' + callIcon + ' fa-fw m-0"></i> ' + (item?.ho_ten ? item?.ho_ten : VoipSIP.formatPhone(item.uri)) + '</span><small>' + moment(item.start).format('MM/DD hh:mm:ss a') + '</small></div><div class="pull-right text-right"><em>' + item.clid + '</em><br>' + callLength + '</div></div>';
                     if (item?.phu_trach != null) i += '<div>' + item.phu_trach + '</div>';
                     if (callActive) {
                         $(".btnCall").attr('disabled', 'disabled');
